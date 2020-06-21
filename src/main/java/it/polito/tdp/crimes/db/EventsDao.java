@@ -83,4 +83,89 @@ public class EventsDao {
 			return null ;
 		}
 	}
+	
+	public List<Integer> getDistricts(){
+		String sql = "SELECT DISTINCT district_id " + 
+				"FROM `events` " + 
+				"ORDER BY district_id asc" ;
+		try {
+			Connection conn = DBConnect.getConnection() ;
+
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			
+			List<Integer> list = new ArrayList<>() ;
+			
+			ResultSet res = st.executeQuery() ;
+			
+			while(res.next()) {
+					list.add(res.getInt("district_id"));
+			}
+			
+			conn.close();
+			return list ;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null ;
+		}
+	}
+
+	public Double getLatMedia(Integer anno, Integer district) {
+		String sql = "SELECT AVG(e.geo_lat) AS lat " + 
+				"FROM `events` AS e " + 
+				"WHERE YEAR(e.reported_date) = ? AND e.district_id = ?";
+		Double lat = null;
+		try {
+			Connection conn = DBConnect.getConnection() ;
+
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			st.setInt(1, anno);
+			st.setInt(2, district);
+			
+			
+			ResultSet res = st.executeQuery() ;
+			
+			if(res.next()) {
+					lat = res.getDouble("lat");
+			}
+			
+			conn.close();
+			return lat;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null ;
+		}
+	}
+
+	public Double getLonMedia(Integer anno, Integer district) {
+		String sql = "SELECT AVG(e.geo_lon) AS lon " + 
+				"FROM `events` AS e " + 
+				"WHERE YEAR(e.reported_date) = ? AND e.district_id = ?";
+		Double lat = null;
+		try {
+			Connection conn = DBConnect.getConnection() ;
+
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			st.setInt(1, anno);
+			st.setInt(2, district);
+			
+			
+			ResultSet res = st.executeQuery() ;
+			
+			if(res.next()) {
+					lat = res.getDouble("lon");
+			}
+			
+			conn.close();
+			return lat;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null ;
+		}
+	}
 }

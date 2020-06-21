@@ -55,6 +55,10 @@ public class FXMLController {
     	}
     	Integer anno = boxAnno.getValue();
     	
+    	this.model.creaGrafo(anno);
+    	
+    	txtResult.appendText("Grafo creato");
+    
     }
 
     @FXML
