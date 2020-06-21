@@ -57,4 +57,30 @@ public class EventsDao {
 		}
 	}
 
+	public List<Integer> listAllYears(){
+		String sql = "SELECT DISTINCT YEAR(reported_date) as year " + 
+				"FROM events " + 
+				"ORDER BY year asc" ;
+		try {
+			Connection conn = DBConnect.getConnection() ;
+
+			PreparedStatement st = conn.prepareStatement(sql) ;
+			
+			List<Integer> list = new ArrayList<>() ;
+			
+			ResultSet res = st.executeQuery() ;
+			
+			while(res.next()) {
+					list.add(res.getInt("year"));
+			}
+			
+			conn.close();
+			return list ;
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null ;
+		}
+	}
 }
