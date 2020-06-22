@@ -5,9 +5,11 @@
 package it.polito.tdp.crimes;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import it.polito.tdp.crimes.model.Model;
+import it.polito.tdp.crimes.model.Vicino;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -57,8 +59,19 @@ public class FXMLController {
     	
     	this.model.creaGrafo(anno);
     	
-    	txtResult.appendText("Grafo creato");
+    	txtResult.appendText("Grafo creato!\n");
     
+    	for(Integer d : this.model.getVertex()) {
+    		
+    		txtResult.appendText("\nVicini del distretto: " + d +"\n");
+    		
+    		List<Vicino> vicini =  model.getVicini(d);
+    		for(Vicino v : vicini) {
+    			txtResult.appendText(v.getVicino() + " " + v.getDistanza() +"\n");
+    		}
+    		
+    		
+    	}
     }
 
     @FXML

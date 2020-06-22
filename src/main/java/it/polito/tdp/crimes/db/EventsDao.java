@@ -13,18 +13,18 @@ import it.polito.tdp.crimes.model.Event;
 
 
 public class EventsDao {
-	
+
 	public List<Event> listAllEvents(){
 		String sql = "SELECT * FROM events" ;
 		try {
 			Connection conn = DBConnect.getConnection() ;
 
 			PreparedStatement st = conn.prepareStatement(sql) ;
-			
+
 			List<Event> list = new ArrayList<>() ;
-			
+
 			ResultSet res = st.executeQuery() ;
-			
+
 			while(res.next()) {
 				try {
 					list.add(new Event(res.getLong("incident_id"),
@@ -46,7 +46,7 @@ public class EventsDao {
 					System.out.println(res.getInt("id"));
 				}
 			}
-			
+
 			conn.close();
 			return list ;
 
@@ -65,15 +65,15 @@ public class EventsDao {
 			Connection conn = DBConnect.getConnection() ;
 
 			PreparedStatement st = conn.prepareStatement(sql) ;
-			
+
 			List<Integer> list = new ArrayList<>() ;
-			
+
 			ResultSet res = st.executeQuery() ;
-			
+
 			while(res.next()) {
-					list.add(res.getInt("year"));
+				list.add(res.getInt("year"));
 			}
-			
+
 			conn.close();
 			return list ;
 
@@ -83,7 +83,7 @@ public class EventsDao {
 			return null ;
 		}
 	}
-	
+
 	public List<Integer> getDistricts(){
 		String sql = "SELECT DISTINCT district_id " + 
 				"FROM `events` " + 
@@ -92,15 +92,15 @@ public class EventsDao {
 			Connection conn = DBConnect.getConnection() ;
 
 			PreparedStatement st = conn.prepareStatement(sql) ;
-			
+
 			List<Integer> list = new ArrayList<>() ;
-			
+
 			ResultSet res = st.executeQuery() ;
-			
+
 			while(res.next()) {
-					list.add(res.getInt("district_id"));
+				list.add(res.getInt("district_id"));
 			}
-			
+
 			conn.close();
 			return list ;
 
@@ -122,16 +122,18 @@ public class EventsDao {
 			PreparedStatement st = conn.prepareStatement(sql) ;
 			st.setInt(1, anno);
 			st.setInt(2, district);
-			
-			
+
+
 			ResultSet res = st.executeQuery() ;
-			
+
 			if(res.next()) {
-					lat = res.getDouble("lat");
+				conn.close();
+				return res.getDouble("lat");
 			}
-			
-			conn.close();
-			return lat;
+			else {
+				conn.close();
+				return null;
+			}
 
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -144,26 +146,27 @@ public class EventsDao {
 		String sql = "SELECT AVG(e.geo_lon) AS lon " + 
 				"FROM `events` AS e " + 
 				"WHERE YEAR(e.reported_date) = ? AND e.district_id = ?";
-		Double lat = null;
+
 		try {
 			Connection conn = DBConnect.getConnection() ;
 
 			PreparedStatement st = conn.prepareStatement(sql) ;
 			st.setInt(1, anno);
 			st.setInt(2, district);
-			
-			
+
+
 			ResultSet res = st.executeQuery() ;
-			
+
 			if(res.next()) {
-					lat = res.getDouble("lon");
+				conn.close();
+				return res.getDouble("lon");
+			} else {
+				conn.close();
+				return null;
+
 			}
-			
-			conn.close();
-			return lat;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return null ;
 		}
